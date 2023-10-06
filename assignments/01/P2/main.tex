@@ -203,12 +203,23 @@ distributed as \(\cbrak{n_1, n_2, \ldots, n_k}\). Define for \(1 \le j \le k\),
 Using the definitions of \(\gamma_j\) described earlier, define
 
 \begin{align}
-     \phi_j &\triangleq \log\brak{\frac{\gamma_j}{\gamma_{j+1}-\gamma_j}} = \mathrm{logit}\brak{\frac{\gamma_j}{\gamma_{j+1}}} \label{eq:phi-j-def} \\
-     g\brak{\phi_j} &\triangleq \log\brak{1 + \exp\brak{\phi_j}} = \log\brak{\frac{\gamma_{j+1}}{\gamma_{j+1}-\gamma_j}}
+     \phi_j &\triangleq \log\brak{\frac{\gamma_j}{\gamma_{j+1}-\gamma_j}} = \mathrm{logit}\brak{\frac{\gamma_j}{\gamma_{j+1}}} \label{eq:phi-def} \\
+     g\brak{\phi_j} &\triangleq \log\brak{1 + \exp\brak{\phi_j}} = \log\brak{\frac{\gamma_{j+1}}{\gamma_{j+1}-\gamma_j}}.
      \label{eq:gphi-def}
 \end{align}
 
-The likelihood can be written as (noting that \(\gamma_k = 1\))
+From \eqref{eq:phi-def}, we have
+
+\begin{align}
+     \pdiff{\gamma_j}{\phi_j} &= \brak{\frac{\gamma_{j+1}-\gamma_j}{\gamma_j}}\frac{\brak{\gamma_{j+1}-\gamma_j} - \brak{-\gamma_j}}{\brak{\gamma_{j+1}-\gamma_j}^2} \\
+                              &= \frac{\gamma_{j+1}}{\gamma_j\brak{\gamma_{j+1}-\gamma_j}} \\
+     \pdiff{\gamma_{j+1}}{\phi_j} &= \brak{\frac{\gamma_{j+1}-\gamma_j}{\gamma_j}}\frac{-\gamma_j}{\brak{\gamma_{j+1}-\gamma_j}^2} \\
+                              &= \frac{-1}{\gamma_{j+1}-\gamma_j} \\
+     \implies \pdiff{\gamma_j}{\phi_j} &= -\frac{\gamma_{j+1}}{\gamma_j}\pdiff{\gamma_j}{\phi_j}
+     \label{eq:pdiff-phi-rel}
+\end{align}
+
+Noting that \(\gamma_k = 1\), the likelihood can be written as
 
 \begin{align}
      L &= \prod_{j=1}^{k}\pi_j^{n_i} \\
@@ -241,29 +252,118 @@ Define
 and denote the entire parameter vector as
 
 \begin{equation}
-     \vec{\psi} \triangleq \myvec{\vec{\beta}^{*\top} & \vec{\tau}^\top}^\top.
+     \vec{\psi} \triangleq \myvec{\vec{\beta}^* \\ \vec{\tau}}.
      \label{eq:psi-def}
 \end{equation}
+
+Define
+
+\begin{align}
+     \vec{X}^*_j &\triangleq \myvec{\vec{e}_j \\ \vec{x}} \\
+     \vec{U} &\triangleq \vec{\bar{x}} - \vec{x} \\
+     w &\triangleq \exp\brak{\vec{\tau}^\top\vec{U}}.
+\end{align}
 
 Then, \eqref{eq:nl-ord-reg-model} can be rewritten as
 
 \begin{equation}
-     Y_j = \mathrm{link}\brak{\gamma_j} = \vec{\beta}^{*\top}\vec{X}^*_j\exp\brak{\vec{\tau}^\top\vec{U}}
+     Y_j = \mathrm{link}\brak{\gamma_j} = \vec{\beta}^{*\top}\vec{X}^*_j\exp\brak{\vec{\tau}^\top\vec{U}}.
      \label{eq:nl-ord-reg-ll}
 \end{equation}
+
+Here, \(\vec{e}_j^\top\) denotes the \(j\)th standard basic vector in
+\(\mathbb{R}^{k-1}\). 
+
+From \eqref{eq:nl-ord-reg-ll}, we have
+
+\begin{align}
+     \pdiff{\beta^*_r}{Y_j} &= X^*_{jr}\exp\brak{\vec{\tau}^\top\vec{U}} = wX^*_{jr} \label{eq:pdiff-beta-Y} \\
+     \pdiff{\tau_r}{Y_j} &= U_r\brak{\vec{\beta}^{*\top}\vec{X}^*_j\exp\brak{\vec{\tau}^\top\vec{U}}} = Y_jU_r \label{eq:pdiff-tau-Y}
+\end{align}
+
+Using the chain rule,
+
+\begin{align}
+     \pdiff{\beta^*_r}{l} &= \sum_{j=1}^{k-1}\pdiff{\phi_j}{l}\pdiff{\beta^*_r}{\phi_j} \\
+                          &= \sum_{j=1}^{k-1}\pdiff{\phi_j}{l}\brak{\pdiff{\gamma_j}{\phi_j}\pdiff{\beta^*_r}{\gamma_j} + \pdiff{\gamma_{j+1}}{\phi_j}\pdiff{\beta^*_r}{\gamma_{j+1}}} \\ 
+                          &= \sum_{j=1}^{k-1}\pdiff{\phi_j}{l}\brak{\pdiff{\gamma_j}{\phi_j}\pdiff{Y_j}{\gamma_j}\pdiff{\beta_r^*}{Y_j} + \pdiff{\gamma_{j+1}}{\phi_j}\pdiff{Y_{j+1}}{\gamma_{j+1}}\pdiff{\beta^*_r}{Y_{j+1}}} \\ 
+                          &= w\sum_{j=1}^{k-1}\pdiff{\phi_j}{l}\pdiff{\gamma_j}{\phi_j}\brak{\pdiff{Y_j}{\gamma_j}X_{jr}^* - \frac{\gamma_j}{\gamma_{j+1}}\pdiff{Y_{j+1}}{\gamma_{j+1}}X_{j+1,r}^*} \\
+                          &= w\sum_{j=1}^{k-1}\pdiff{\phi_j}{l}V_j^{-1}q_{jr}
+                          \label{eq:pdiff-beta-l}
+\end{align}
 
 where
 
 \begin{align}
-     \vec{X}^*_j &\triangleq \myvec{\vec{e_j}^\top & \vec{X}} \\
-     \vec{U} &\triangleq \vec{\bar{x}} - \vec{x}.
+     V_j &\triangleq \pdiff{\phi_j}{\gamma_j} \label{eq:V-def} \\
+     q_{jr} &\triangleq \pdiff{Y_j}{\gamma_j}X_{jr}^* - \frac{\gamma_j}{\gamma_{j+1}}\pdiff{Y_{j+1}}{\gamma_{j+1}}X_{j+1,r}^*. \label{eq:q-def}
 \end{align}
 
-Therefore, using the chain rule,
+From \eqref{eq:phi-def}, \eqref{eq:gphi-def} and \eqref{eq:ord-reg-l}, we have,
+\begin{align}
+     \pdiff{\phi_j}{l} &= n\brak{Z_j - Z_{j+1}\pdiff{\phi_j}{g\brak{\phi_j}}} \\
+                       &= n\brak{Z_j - Z_{j+1}\frac{\gamma_j}{\gamma_{j+1}}}.
+                       \label{eq:pdiff-phi-l}
+\end{align}
+
+Thus, using \eqref{eq:pdiff-beta-Y} and \eqref{eq:q-def},
 
 \begin{align}
-     \grad{\vec{\psi}}{l} &= \sum_{j=1}^{k-1} \pdiff{\phi_j}{l}\grad{\vec{\psi}}{\phi_j} \\
-                          &= \sum_{j=1}^{k-1} \pdiff{\phi_j}{l}\brak{\pdiff{\gamma_j}{\phi_j}\grad{\vec{\psi}}{\gamma_j} + \pdiff{\gamma_{j+1}}{\phi_j}\grad{\vec{\psi}}{\gamma_{j+1}}} \\ 
+     \frac{\partial^2l}{\partial \beta_r^* \partial \phi_j} &= -nwZ_{j+1}\frac{\gamma_{j+1}\pdiff{Y_j}{\gamma_j}X_{jr}^* - \gamma_j\pdiff{Y_{j+1}}{\gamma_{j+1}}X_{j+1,r}^*}{\gamma_{j+1}^2} \\
+                                                            &= -nw\frac{Z_{j+1}}{\gamma_{j+1}}q_{jr}.
+                                                            \label{eq:pdiff-beta-phi-l}
+\end{align}
+
+Notice that \(V_j\) and \(q_{jr}\) are independent of \(\beta^*_s,\ s \neq r\).
+Differentiating \(l\) twice, from \eqref{eq:pdiff-beta-l} and
+\eqref{eq:pdiff-beta-phi-l},
+
+\begin{align}
+     \frac{\partial^2l}{\partial \beta_r^* \partial \beta_s^*} &= -nw^2\sum_{j=1}^{k-1}V_j^{-1}\frac{Z_{j+1}}{\gamma_{j+1}}q_{jr}q_{js} \\
+     \implies \mean{\frac{\partial^2l}{\partial \beta_r^* \partial \beta_s^*}} &= -nw^2\sum_{j=1}^{k-1}V_j^{-1}q_{jr}q_{js}
+     \label{eq:pdiff2-beta-l}
+\end{align}
+
+since by \eqref{eq:rz-j-def}, \(\mean{Z_{j+1}} = \gamma_{j+1}\).
+
+Using \eqref{eq:pdiff-tau-Y}, \eqref{eq:pdiff-phi-rel} and the chain rule in a
+similar manner, we obtain
+
+\begin{align}
+     \pdiff{\tau_r}{l} &= U_r\sum_{j=1}^{k-1}\pdiff{\phi_j}{l}\pdiff{\gamma_j}{\phi_j}\brak{\pdiff{Y_j}{\gamma_j}Y_j - \frac{\gamma_j}{\gamma_{j+1}}\pdiff{Y_{j+1}}{\gamma_{j+1}}Y_{j+1}} \\
+                       &= U_r\sum_{j=1}^{k-1}\pdiff{\phi_j}{l}V_j^{-1}q_j
+                       \label{eq:pdiff-tau-l}
+\end{align}
+
+where we define
+
+\begin{equation}
+     q_j \triangleq \pdiff{Y_j}{\gamma_j}Y_j - \frac{\gamma_j}{\gamma_{j+1}}\pdiff{Y_{j+1}}{\gamma_{j+1}}Y_{j+1}.
+     \label{eq:qj-def}
+\end{equation}
+
+Thus, the expected second derivative turns out to be
+
+\begin{equation}
+     \mean{\frac{\partial^2l}{\partial \tau_r \partial \tau_s}} = -nU_rU_s\sum_{j=1}^{k-1}V_j^{-1}q_j^2.
+     \label{eq:pdiff2-tau-l}
+\end{equation}
+
+Similarly, the mixed expected second derivatives are
+
+\begin{equation}
+     \mean{\frac{\partial^2l}{\partial \beta_r^* \partial \tau_s}} = -nwU_s\sum_{j=1}^{k-1}V_j^{-1}q_jq_{jr}.
+     \label{eq:pdiff-2-beta-tau}
+\end{equation}
+
+Thus, the negative Hessian matrix \(-\nabla^2_{\vec{\psi}}l\) is symmetric and
+from \eqref{eq:pdiff2-beta-l} and \eqref{eq:pdiff2-tau-l}, has nonnegative
+diagonal entries. Therefore, it is positive semidefinite.
+
+Applying a Taylor series expansion for \(\nabla_{\vec{\psi}}l\), we get
+
+\begin{align}
+     \nabla_{\vec{\psi}}l = \nabla_{\vec{\psi}}l\big|_{\vec{\hat{\psi}}} - \nabla^2_{\vec{\psi}}l\brak{\vec{\hat{\psi}}-\vec{\psi}}
 \end{align}
 
 \bibliography{references}
