@@ -353,18 +353,33 @@ Similarly, the mixed expected second derivatives are
 
 \begin{equation}
      \mean{\frac{\partial^2l}{\partial \beta_r^* \partial \tau_s}} = -nwU_s\sum_{j=1}^{k-1}V_j^{-1}q_jq_{jr}.
-     \label{eq:pdiff-2-beta-tau}
+     \label{eq:pdiff2-beta-tau}
 \end{equation}
 
-Thus, the negative Hessian matrix \(-\nabla^2_{\vec{\psi}}l\) is symmetric and
-from \eqref{eq:pdiff2-beta-l} and \eqref{eq:pdiff2-tau-l}, has nonnegative
-diagonal entries. Therefore, it is positive semidefinite.
+Thus, the negative expectation of the Hessian matrix \(\vec{A}_l =
+-\mean{\vec{H}_l}\) is symmetric and from \eqref{eq:pdiff2-beta-l} and
+\eqref{eq:pdiff2-tau-l}, has nonnegative diagonal entries. Therefore, it is
+positive semidefinite.
 
-Applying a Taylor series expansion for \(\nabla_{\vec{\psi}}l\), we get
+Applying a Taylor series expansion for \(\nabla_{\vec{\psi}}l\) around
+\(\vec{\psi}_n\) using the expected Hessian matrix, we get
+
+\begin{equation}
+     \nabla l\brak{\vec{\psi}} = \nabla l\brak{\vec{\psi}_n} - \vec{A}_l\brak{\vec{\psi} - \vec{\psi}_n} + \ldots
+     \label{eq:grad-l-taylor}
+\end{equation}
+
+Using a linear approximation, and taking \(\nabla l\brak{\vec{\psi}} = \vec{0}\)
+at \(\vec{\psi} = \vec{\psi}_{n+1}\), we get the update equation
 
 \begin{align}
-     \nabla_{\vec{\psi}}l = \nabla_{\vec{\psi}}l\big|_{\vec{\hat{\psi}}} - \nabla^2_{\vec{\psi}}l\brak{\vec{\hat{\psi}}-\vec{\psi}}
+     \vec{A}_l\brak{\vec{\psi}_{n+1}-\vec{\psi}_n} &= \nabla l\brak{\vec{\psi}_n} \\
+     \implies \vec{\psi}_{n+1} &= \vec{\psi}_n + \vec{A}_l^{-1}\nabla l\brak{\vec{\psi}_n}.
+     \label{eq:nr-fisher-update}
 \end{align}
+
+where the entries of \(\vec{A}_l\) are defined in \eqref{eq:pdiff2-beta-l},
+\eqref{eq:pdiff2-tau-l} and \eqref{eq:pdiff2-beta-tau}.
 
 \bibliography{references}
 
