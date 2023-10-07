@@ -1,0 +1,230 @@
+\documentclass[journal,12pt,twocolumn]{IEEEtran}
+\usepackage{setspace}
+\usepackage{gensymb}
+\singlespacing
+\usepackage[cmex10]{amsmath}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{txfonts}
+\usepackage{stfloats}
+\usepackage{bm}
+\usepackage{cite}
+\usepackage{cases}
+\usepackage{subfig}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{verbatim}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{tkz-euclide} % loads  TikZ and tkz-base
+\usepackage{listings}
+\usepackage{color}    
+\usepackage{array}    
+\usepackage{longtable}
+\usepackage{calc}     
+\usepackage{multirow} 
+\usepackage{hhline}   
+\usepackage{ifthen}   
+\usepackage{lscape}     
+\usepackage{chngcntr}
+\DeclareMathOperator*{\Res}{Res}
+\renewcommand\thesection{\arabic{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
+
+\renewcommand\thesectiondis{\arabic{section}}
+\renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
+\renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
+\renewcommand\thetable{\arabic{table}}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+\def\inputGnumericTable{}                                 %%
+
+\lstset{
+%language=C,
+frame=single, 
+breaklines=true,
+columns=fullflexible,
+literate=
+{-}{$\rightarrow{}$}{1},
+}
+%\lstset{
+%language=tex,
+%frame=single, 
+%breaklines=true
+%}
+\setlength{\parindent}{0pt}
+\DeclareMathOperator*{\argmax}{arg\!\max}
+\DeclareMathOperator*{\argmin}{arg\!\min}
+\begin{document}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}{Example}[section]
+\newtheorem{definition}[problem]{Definition}
+\newcommand{\BEQA}{\begin{eqnarray}}
+\newcommand{\EEQA}{\end{eqnarray}}
+\newcommand{\define}{\stackrel{\triangle}{=}}
+\bibliographystyle{IEEEtran}
+\providecommand{\mbf}{\mathbf}
+\providecommand{\pr}[1]{\ensuremath{\Pr\left(#1\right)}}
+\providecommand{\qfunc}[1]{\ensuremath{Q\left(#1\right)}}
+\providecommand{\sbrak}[1]{\ensuremath{{}\left[#1\right]}}
+\providecommand{\lsbrak}[1]{\ensuremath{{}\left[#1\right.}}
+\providecommand{\rsbrak}[1]{\ensuremath{{}\left.#1\right]}}
+\providecommand{\brak}[1]{\ensuremath{\left(#1\right)}}
+\providecommand{\lbrak}[1]{\ensuremath{\left(#1\right.}}
+\providecommand{\rbrak}[1]{\ensuremath{\left.#1\right)}}
+\providecommand{\cbrak}[1]{\ensuremath{\left\{#1\right\}}}
+\providecommand{\lcbrak}[1]{\ensuremath{\left\{#1\right.}}
+\providecommand{\rcbrak}[1]{\ensuremath{\left.#1\right\}}}
+\theoremstyle{remark}
+\newtheorem{rem}{Remark}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\providecommand{\abs}[1]{\left\vert#1\right\vert}
+\providecommand{\res}[1]{\Res\displaylimits_{#1}} 
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\mtx}[1]{\mathbf{#1}}
+\providecommand{\mean}[1]{E\left[ #1 \right]}   
+\providecommand{\fourier}{\overset{\mathcal{F}}{ \rightleftharpoons}}
+\providecommand{\system}[1]{\overset{\mathcal{#1}}{ \longleftrightarrow}}
+\providecommand{\grad}[2]{\ensuremath{\mathbf{\nabla}_{#1}#2}}
+\providecommand{\pdiff}[2]{\ensuremath{\frac{\partial #2}{\partial #1}}}
+\providecommand{\diff}[2]{\ensuremath{\frac{d #2}{d #1}}}
+\newcommand{\solution}{\noindent \textbf{Solution: }}
+\newcommand{\cosec}{\,\text{cosec}\,}
+\providecommand{\dec}[2]{\ensuremath{\overset{#1}{\underset{#2}{\gtrless}}}}
+\newcommand{\myvec}[1]{\ensuremath{\begin{pmatrix}#1\end{pmatrix}}}
+\newcommand{\mydet}[1]{\ensuremath{\begin{vmatrix}#1\end{vmatrix}}}
+\renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}
+\def\putbox#1#2#3{\makebox[0in][l]{\makebox[#1][l]{}\raisebox{\baselineskip}[0in][0in]{\raisebox{#2}[0in][0in]{#3}}}}
+     \def\rightbox#1{\makebox[0in][r]{#1}}
+     \def\centbox#1{\makebox[0in]{#1}}
+     \def\topbox#1{\raisebox{-\baselineskip}[0in][0in]{#1}}
+     \def\midbox#1{\raisebox{-0.5\baselineskip}[0in][0in]{#1}}
+
+\vspace{3cm}
+\title{CS3390 Assignment 1\\Problem 3}
+\author{Gautam Singh (CS21BTECH11018)\\Jaswanth Beere (BM21BTECH11007)}
+\maketitle
+\tableofcontents
+\bigskip
+
+This document describes a solution for weighted least squares in a
+heteroscedastic setting.
+
+\section{Likelihood and Prior}
+
+We assume that the response variable \(t_n\) is approximated by a Gaussian
+distribution with mean \(\vec{w}^\top\vec{x_n}\) and variance
+\(\sigma^2\brak{\vec{x}_n}\) in a heteroscedastic setting. Thus, the likelihood
+for a single datapoint \(\brak{\vec{x}_n, t_n}\) is
+
+\begin{multline}
+     \pr{t_n|\vec{x}_n;\vec{w},\sigma^2\brak{\vec{x}_n}} = \mathcal{N}\brak{t_n|\vec{w}^\top\vec{x}_n,\sigma^2\brak{\vec{x}_n}} \\
+                                                         = \frac{1}{\sqrt{2\pi\sigma^2\brak{\vec{x}_n}}}\exp\brak{-\frac{\brak{t_n-\vec{w}^\top\vec{x}_n}}{2\sigma^2\brak{\vec{x}_n}}}
+                                                         \label{eq:likelihood}
+\end{multline}
+
+For the prior we assume that \(\vec{w}\) is drawn from a multivariate Gaussian
+distribution, that is,
+
+\begin{multline}
+     \pr{\vec{w}} = \mathcal{N}\brak{\vec{w}|\vec{\mu},\vec{\Sigma}} \\
+                  = \frac{1}{\sqrt{\brak{2\pi}^D\abs{\vec{\Sigma}}}}\exp\brak{-\frac{1}{2}\brak{\vec{w}-\vec{\mu}}^\top\vec{\Sigma}^{-1}\brak{\vec{w}-\vec{\mu}}}.
+                  \label{eq:prior}
+\end{multline}
+
+where \(D\) is the dimension of \(\vec{w}\).
+
+\section{ML and MAP Objective Functions}
+
+Considering a dataset \(\mathcal{D}\) of \(N\) independent and identically
+distributed samples \(\brak{\vec{x}_i, \sigma^2\brak{\vec{x}_i}, t_i},\ 1 \le i
+\le N\), the ML objective using \eqref{eq:likelihood} is
+
+\begin{align}
+     \vec{\hat{w}}_{ML} &= \argmax_{\vec{w}}\log\pr{\mathcal{D}|\vec{w}} \\
+                        &= \argmax_{\vec{w}}\log\prod_{i=1}^{N}\pr{t_i|\vec{x}_i;\vec{w},\sigma^2\brak{\vec{x}_i}} \\
+                        &= \argmax_{\vec{w}}\sum_{i=1}^{N}\log\pr{t_i|\vec{x}_i;\vec{w},\sigma^2\brak{\vec{x}_i}} \\
+                        &= \argmax_{\vec{w}}\sum_{i=1}^{N}-\frac{1}{2}\log\brak{2\pi\sigma^2\brak{\vec{x}_i}} -\frac{\brak{t_i-\vec{w}^\top\vec{x}_i}^2}{2\sigma^2\brak{\vec{x}_i}} \\
+                        &= \argmin_{\vec{w}}\frac{1}{2}\sum_{i=1}^{N}\frac{\brak{t_i-\vec{w}^\top\vec{x}_i}^2}{\sigma^2\brak{\vec{x}_i}}.
+                        \label{eq:ml-obj}
+\end{align}
+
+On the other hand, using \eqref{eq:likelihood}, \eqref{eq:prior}, and
+\eqref{eq:ml-obj}, the MAP objective becomes
+
+\begin{align}
+     \vec{\hat{w}}_{MAP} &= \argmax_{\vec{w}}\log\pr{\vec{w}|\mathcal{D}} \\
+                         &= \argmax_{\vec{w}}\log\brak{\frac{\pr{\mathcal{D}|\vec{w}}\pr{\vec{w}}}{\pr{\mathcal{D}}}} \\
+                         &= \argmax_{\vec{w}}\log\pr{\mathcal{D}|\vec{w}}\pr{\vec{w}} \\
+                         &= \argmax_{\vec{w}}\log\pr{\mathcal{D}|\vec{w}} + \log\pr{\vec{w}} \\
+                         & \begin{multlined}
+                         = \argmin_{\vec{w}}\lbrak{\frac{1}{2}\sum_{i=1}^{N}\frac{\brak{t_i-\vec{w}^\top\vec{x}_i}^2}{\sigma^2\brak{\vec{x}_i}}} \\
+                         + \rbrak{\frac{1}{2}\brak{\vec{w}-\vec{\mu}}^\top\vec{\Sigma}^{-1}\brak{\vec{w}-\vec{\mu}}}.
+                         \end{multlined}
+                         \label{eq:map-obj}
+\end{align}
+
+Note that taking \(\vec{\mu} = \vec{0}\) and \(\vec{\Sigma} =
+\lambda^{-1}\vec{I}\) gives
+
+\begin{equation}
+     \vec{\hat{w}_{MAP}} = \argmin_{\vec{w}}\frac{1}{2}\sum_{i=1}^{N}\frac{\brak{t_i-\vec{w}^\top\vec{x}_i}^2}{\sigma^2\brak{\vec{x}_i}} + \frac{\lambda}{2}\norm{\vec{w}}^2
+     \label{eq:map-reg}
+\end{equation}
+
+which is the objective function for \emph{regularized weighted least squares}
+method.
+
+\section{Maximum Likelihood Solution}
+
+Defining
+
+\begin{align}
+     r_n &= \frac{1}{\sigma^2\brak{\vec{x}_n}} \label{eq:rn-def} \\
+     \vec{\phi}\brak{\vec{x}_n} &= \vec{x}_n \label{eq:phi-def}
+\end{align}
+
+then from \eqref{eq:ml-obj}, the sum of squares error function becomes
+
+\begin{equation}
+     E_{\mathcal{D}}\brak{\vec{w}} \triangleq \frac{1}{2}\sum_{i=1}^{N}r_n\cbrak{t_n-\vec{w}^\top\vec{\phi}\brak{\vec{x}_n}}^2.
+     \label{eq:err-func-def}
+\end{equation}
+
+where \(r_n > 0\ \forall\ 1 \le n \le N\).
+
+Notice that \eqref{eq:err-func-def} can be written as
+
+\begin{equation}
+     E_{\mathcal{D}}\brak{\vec{w}} = \frac{1}{2}\brak{\vec{y}-\vec{X}^\top\vec{w}}^\top\vec{R}\brak{\vec{y}-\vec{X}^\top\vec{w}}.
+     \label{eq:err-func-vec}
+\end{equation}
+
+where
+
+\begin{align}
+     \vec{y} &\triangleq \myvec{y_1 & y_2 & \ldots & y_N}^\top \label{eq:y-def} \\
+     \vec{X} &\triangleq \myvec{\vec{X}_1 & \vec{X}_2 & \ldots & \vec{X}_n} \label{eq:X-def} \\
+     \vec{R} &\triangleq \mathrm{diag}\myvec{r_1 & r_2 & \ldots & r_n}. \label{eq:R-def}
+\end{align}
+
+Taking the gradient of \eqref{eq:err-func-vec} and setting it to \(\vec{0}\)
+gives (where we note that \(\vec{R}\) is symmetric.)
+
+\begin{align}
+     -\brak{y-\vec{X}^\top\vec{w}}^\top\vec{RX}^\top &= \vec{0} \\
+     \vec{XRX}^\top\vec{w} &= \vec{XRy} \\
+     \implies \vec{\hat{w}}_{ML} &= \brak{\vec{XRX}^\top}^{-1}\vec{XRy}
+     \label{eq:w-ml-sol}
+\end{align}
+
+
+\end{document}
