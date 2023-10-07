@@ -166,7 +166,7 @@ The second derivatives are therefore
      \label{eq:pdiff2-err}
 \end{align}
 
-Hence, from \eqref{eq:pdiff-err} the \emph{gradient} of \eqref{eq:err-def} is
+Hence, from \eqref{eq:pdiff-err} the gradient of \eqref{eq:err-def} is
 
 \begin{equation}
      \nabla E\brak{\vec{w}} = -\sum_{i=1}^{N}\brak{y_i - p_i}\vec{x}_i = -\vec{X}^\top\brak{\vec{y}-\vec{p}}     
@@ -197,6 +197,8 @@ Thus, the Hessian update equation becomes
                    \label{eq:hess-upd}
 \end{align}
 
+The algorithm for performing such a computation is depicted below.
+
 Therefore, the optimal solution is
 
 \begin{equation}
@@ -207,5 +209,14 @@ Therefore, the optimal solution is
 Note that the optimal solution is quite similar to the one for reweighted least
 squares regression in Problem 3, where \(\vec{y}-\vec{p}\) is the ``corrected''
 outputs with the probabilities of being the correction.
+
+\section{Convexity of Error Function}
+
+For all \(i\), \(p_i\brak{1-p_i} \ge 0\), thus the diagonal entries of
+\(\vec{W}\) are all positive. Hence, from \eqref{eq:hess-err}, it follows that
+the eigenvalues of \(\vec{H}_E\), which are the diagonal entries in \(\vec{W}\)
+are nonnegative for any parameters \(\vec{w}\). Thus, \(\vec{H}_E\) is positive
+semidefinite and therefore, \(E\brak{\vec{w}}\) is convex. Hence, it has a
+unique minimum at the point defined in \eqref{eq:w-ml-log-reg}.
 
 \end{document}
