@@ -30,6 +30,8 @@
 \usepackage{ifthen}   
 \usepackage{lscape}     
 \usepackage{chngcntr}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 \DeclareMathOperator*{\Res}{Res}
 \renewcommand\thesection{\arabic{section}}
 \renewcommand\thesubsection{\thesection.\arabic{subsection}}
@@ -199,7 +201,24 @@ Thus, the Hessian update equation becomes
 
 The algorithm for performing such a computation is depicted below.
 
-Therefore, the optimal solution is
+\begin{algorithm}
+     \caption{Newton-Raphson Update Algorithm for Logistic Regression}\label{alg:nr-log-reg}
+     \begin{algorithmic}[1]
+          \Function{NR-Logistic-Regression}{$\vec{X}$, $\vec{y}$}
+          \State \(\brak{r,c} \gets \mathrm{dim}\brak{\vec{X}}\)
+          \State let \(\vec{w}\) be an initial guess for \(\vec{\hat{w}}_{ML}\)
+          \Repeat
+               \State compute \(\vec{p}\) and \(\vec{W}\) as in \eqref{eq:p-def} and \eqref{eq:W-def}
+               \State \(\vec{w} \gets \vec{w} + \brak{\vec{X}^\top\vec{WX}}^{-1}\vec{X}^\top\brak{\vec{y}-\vec{p}}\)
+          \Until{(the change in \(\vec{w}\) is small enough)}
+          \EndFunction
+          \Return \(\vec{w}\)
+     \end{algorithmic}
+\end{algorithm}
+
+\section{Relation to Weighted Least Squares}
+
+The optimal solution \(\vec{\hat{w}}_{ML}\), given by
 
 \begin{equation}
      \vec{\hat{w}}_{ML} = \brak{\vec{X}^\top\vec{WX}}^{-1}\vec{X}^\top\brak{\vec{y}-\vec{p}}.
@@ -208,7 +227,9 @@ Therefore, the optimal solution is
 
 Note that the optimal solution is quite similar to the one for reweighted least
 squares regression in Problem 3, where \(\vec{y}-\vec{p}\) is the ``corrected''
-outputs with the probabilities of being the correction.
+outputs with the probabilities of success being the correction. However, the
+diagonal matrix \(\vec{W}\) is a function of \(\vec{w}\), hence this algorithm
+is known as the \emph{iterative reweighted least squares} (IRLS) method.
 
 \section{Convexity of Error Function}
 
