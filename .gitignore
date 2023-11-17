@@ -301,6 +301,6 @@ TSWLatexianTemp*
 #*Notes.bib
 
 
-# for assignment 02 datasets datasets
+# for datasets
 
-*_32x32.mat
+*.mat
